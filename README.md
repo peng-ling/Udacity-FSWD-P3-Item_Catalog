@@ -5,3 +5,13 @@
 3. The virtualization software used for tis project is [VirtualBox](https://www.virtualbox.org/), so this needs to be
 4. installed, too.
 5. This project makes use of [flask](http://flask.pocoo.org/), so you need to install it, if not already. You can follow   the [documentation](http://flask.pocoo.org/docs/0.10/installation/#installation) if necassary.
+
+## items for new readme ##
+
+To use oauth from Google, you need to install the [the Google APIs Client Library for Python](https://developers.google.com/api-client-library/python/start/installation)
+
+Go here for [more information on Google oauth for Python](https://developers.google.com/api-client-library/python/guide/aaa_oauth)
+
+you need to instal [Requests](http://docs.python-requests.org/en/master/user/install/#pip-install-requests)
+
+Go here for [more information on Requests] http://docs.python-requests.org/en/master/
