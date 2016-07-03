@@ -25,7 +25,7 @@ def startpage():
 
 
 @app.route('/metalitems')
-def startpage():
+def metalitems():
 
     if 'username' not in login_session:
         return redirect('/')
