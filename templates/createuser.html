@@ -1,0 +1,12 @@
+{% extends "topbar.html" %} {% block createuser %}
+<h1>Create your account for the Heavy Metal Item Data Base</h1>
+<form method="post" action="/adduser">
+    <div>
+        <input type="text" placeholder="Username" name="newusername">
+    </div>
+    <div>
+        <input type="password" placeholder="Password" name="newpassword">
+    </div>
+    <button type="submit">Create Account</button>
+</form>
+{% endblock %}

@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 import logging
 
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
 Base = declarative_base()
 
@@ -27,10 +27,9 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(250))
-    email = Column(String(250))
-    picture = Column(String(250)
-                     )
+    username = Column(String(250))
+    password = Column(String(250))
+
 
 
 class Category(Base):
