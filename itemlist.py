@@ -33,7 +33,7 @@ def startpage():
     return render_template('metalitems.html')
 
 
-@app.route('/login2', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
 
     print request.form['password']
@@ -45,9 +45,28 @@ def login():
     user = session.query(User).filter_by(username=_username).first()
 
     if user is not None:
-        print check_password_hash(user.password, _password)
+        if check_password_hash(user.password, _password) == True:
+            login_session['logged_in'] = True
+            print login_session
+            _flashmessage = 'Hi ' + user.username + ', you did successfully log in.'
+            flash(_flashmessage)
+        else:
+            login_session['logged_in'] = False
+            _flashmessage = user.username + ', did you forget your password? Try it again.'
+            flash(_flashmessage)
+
     else:
-        print 'user not found'
+        _flashmessage = 'User does not exist, seems you need to sign up first.'
+        flash(_flashmessage)
+
+    return render_template('metalitems.html')
+
+
+@app.route('/logout', methods=['POST'])
+def logout():
+
+    login_session['logged_in'] = False
+    flash('You were successfully logged out')
 
     return render_template('metalitems.html')
 
@@ -60,21 +79,26 @@ def createuser():
 @app.route('/adduser', methods=['POST'])
 def adduser():
 
-    print request.form['newpassword']
-    print request.form['newusername']
-
     _newpassword = generate_password_hash(request.form['newpassword'])
     _newusername = request.form['newusername']
 
+    _userexists = session.query(User).filter_by(username=_newusername).first()
+
+    if _userexists is not None:
+        _flashmessage = 'Unfortunately the username: ' + request.form['newusername'] \
+            + ' is already ocupied by someone else, choose an other one!'
+        flash(_flashmessage)
+
+        return render_template('createuser.html')
+
     newUser = User(username=_newusername, password=_newpassword)
-    print newUser
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(username=_newusername).one()
-    print user.id
+    user = session.query(User).filter_by(username=_newusername).first()
+    _flashmessage = 'Welcome ' + user.username + '! Log in to start.'
+    flash(_flashmessage)
 
     return render_template('metalitems.html')
-
 
 if __name__ == '__main__':
     app.secret_key = 'geheim'

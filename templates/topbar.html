@@ -20,23 +20,34 @@
             <div>Paul's Heavy Metal Items Data Base</div>
         </div>
         <div>
-            <form method="post" action="/createuser">
-                <button type="submit" >Sign up</button>
+            {%if session['logged_in'] %}
+            <form method="post" action="/logout">
+                <button type="submit">Log out</button>
             </form>
-            <form method="post" action="/login2">
+            {% endif %} {%if not session['logged_in'] %}
+            <form method="post" action="/createuser">
+                <button type="submit">Sign up</button>
+            </form>
+            <form method="post" action="/login">
                 <div>
                     <input type="text" placeholder="Username" name="username">
                 </div>
                 <div>
                     <input type="password" placeholder="Password" name="password">
                 </div>
-                <button type="submit">Sign in</button>
+                <button type="submit">Log in</button>
             </form>
+            {% endif %}
         </div>
     </div>
-    <hr />
-    {% block createuser %}
-    {% endblock %}
+    <hr /> {% with messages = get_flashed_messages() %} {% if messages %}
+    <div>
+        {% for message in messages %}
+        <div>{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+    <hr /> {% block createuser %} {% endblock %}
 </body>
 
 </html>
