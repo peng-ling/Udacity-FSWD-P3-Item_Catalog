@@ -14,14 +14,18 @@ app = Flask(__name__)
 
 APPLICATION_NAME = "Paul's Heavy Metal Item Database"
 
-
 @app.route('/')
 def startpage():
 
     if 'username' not in login_session:
-        return redirect('/')
+        return redirect('/welcome')
 
     return render_template('main.html')
+
+@app.route('/welcome')
+def welcome():
+
+    return render_template('welcome.html')
 
 
 @app.route('/metalitems')
@@ -101,6 +105,7 @@ def adduser():
     return render_template('metalitems.html')
 
 if __name__ == '__main__':
+    print app.url_map
     app.secret_key = 'geheim'
     app.debug = True
 
