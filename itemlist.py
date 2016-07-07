@@ -14,34 +14,38 @@ app = Flask(__name__)
 
 APPLICATION_NAME = "Paul's Heavy Metal Item Database"
 
+
 @app.route('/')
 def startpage():
 
-    if 'username' not in login_session:
+    if login_session['logged_in'] == False:
         return redirect('/welcome')
 
-    return render_template('main.html')
+    redirect(url_for('metalitems'))
+
 
 @app.route('/welcome')
 def welcome():
 
     return render_template('welcome.html')
 
+#--METALITEMS-------------------------------------------------------------
+
 
 @app.route('/metalitems')
 def metalitems():
 
-    if 'username' not in login_session:
+    if login_session['logged_in'] == False:
         return redirect('/')
 
-    return render_template('metalitems.html')
+    _user_id = login_session['userid']
+    _categories = session.query(Category).filter_by(user_id=_user_id)
+
+    return render_template('metalitems.html', categories=_categories)
 
 
 @app.route('/login', methods=['POST'])
 def login():
-
-    print request.form['password']
-    print request.form['username']
 
     _password = request.form['password']
     _username = request.form['username']
@@ -51,7 +55,7 @@ def login():
     if user is not None:
         if check_password_hash(user.password, _password) == True:
             login_session['logged_in'] = True
-            print login_session
+            login_session['userid'] = user.id
             _flashmessage = 'Hi ' + user.username + ', you did successfully log in.'
             flash(_flashmessage)
         else:
@@ -63,7 +67,7 @@ def login():
         _flashmessage = 'User does not exist, seems you need to sign up first.'
         flash(_flashmessage)
 
-    return render_template('metalitems.html')
+    return redirect(url_for('metalitems'))
 
 
 @app.route('/logout', methods=['POST'])
@@ -103,6 +107,35 @@ def adduser():
     flash(_flashmessage)
 
     return render_template('metalitems.html')
+
+
+@app.route('/newcategory', methods=['POST'])
+def newcategory():
+
+    _categoryname = request.form['newcategory']
+    _user_id = login_session['userid']
+    newCategory = Category(name=_categoryname, user_id=_user_id)
+    session.add(newCategory)
+    session.commit()
+
+    return redirect(url_for('metalitems'))
+
+#--NEWITEMS--------------------------------------------------------------------
+
+
+@app.route('/newitem/<int:categoryid>', methods=['POST', 'GET'])
+def newitem(categoryid):
+    if request.method == 'POST':
+        _itemtitle = request.form['newitemtitle']
+        _itemdescription = request.form['newitemdescription']
+        _user_id = login_session['userid']
+        _newItem = Item(title=_itemtitle, description=_itemdescription,
+                        category_id=categoryid, user_id=_user_id)
+        session.add(_newItem)
+        session.commit()
+        return redirect(url_for('metalitems'))
+    else:
+        return render_template('newmetalitem.html', categoryid=categoryid)
 
 if __name__ == '__main__':
     print app.url_map
