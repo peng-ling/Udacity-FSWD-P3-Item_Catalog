@@ -1,6 +1,6 @@
 {% extends "topbar.html" %} {% block main %}
-<h1>Welcome to the Heavy Metal Item Data Base</h1> {% if session['logged_in'] %}
-<div>
+<div class="grid">
+    <h1>Welcome to the Heavy Metal Item Data Base</h1>
     <form method="post" action="/newcategory">
         <div>
             <input type="text" placeholder="Category Name" name="newcategory">
@@ -8,11 +8,21 @@
         <button type="submit">Create new category</button>
     </form>
     <hr /> {%for c in categories %}
-    <h2>{{c.name}}</h2>
-    <a href="{{url_for('newitem', categoryid = c.id)}}">Create new Metal item</a> {%endfor%}
+    <div class="row_margin_20">
+        <div class="col-6">
+            <h2>{{c.name}}</h2>
+            <a href="{{url_for('newitem', categoryid = c.id)}}">Create new Metal item</a>
+        </div>
+        <div class="col-6">
+            {%for i in items%} {%if i.category_id is equalto c.id%}
+            <div class="row_margin_15 ">
+                <div>
+                    {{i.title}}
+                </div>
+            </div>
+            {%endif%} {%endfor%}
+        </div>
+    </div>
+    <hr /> {%endfor%}
 </div>
-{% else %}
-<div>
-    logged out
-</div>
-{% endif %} {% endblock %}
+{% endblock %}

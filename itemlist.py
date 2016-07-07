@@ -40,8 +40,9 @@ def metalitems():
 
     _user_id = login_session['userid']
     _categories = session.query(Category).filter_by(user_id=_user_id)
+    _items = session.query(Item).filter_by(user_id=_user_id)
 
-    return render_template('metalitems.html', categories=_categories)
+    return render_template('metalitems.html', categories=_categories, items=_items)
 
 
 @app.route('/login', methods=['POST'])
