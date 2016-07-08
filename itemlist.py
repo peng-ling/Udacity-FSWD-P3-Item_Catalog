@@ -18,10 +18,11 @@ APPLICATION_NAME = "Paul's Heavy Metal Item Database"
 @app.route('/')
 def startpage():
 
+    print login_session['logged_in']
     if login_session['logged_in'] == False:
         return redirect('/welcome')
 
-    redirect(url_for('metalitems'))
+    return redirect(url_for('metalitems'))
 
 
 @app.route('/welcome')
@@ -137,6 +138,23 @@ def newitem(categoryid):
         return redirect(url_for('metalitems'))
     else:
         return render_template('newmetalitem.html', categoryid=categoryid)
+
+#--DELETEITEMS--------------------------------------------------------------------
+
+@app.route('/deleteitem/<int:itemid>',methods=['POST', 'GET'])
+def deleteitem(itemid):
+
+    if request.method == 'GET':
+        _user_id = login_session['userid']
+        _itemToDelete = session.query(Item).filter_by(id=itemid, user_id=_user_id).first()
+        print '---------------'
+        print _itemToDelete.id
+        print '---------------'
+        session.delete(_itemToDelete)
+        session.commit()
+
+    return redirect(url_for('metalitems'))
+
 
 if __name__ == '__main__':
     print app.url_map
