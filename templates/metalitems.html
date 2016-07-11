@@ -16,11 +16,14 @@
         <div class="col-6">
             {%for i in items%} {%if i.category_id is equalto c.id%}
             <div class="row_margin_20 ">
-                <div class="col-6">
+                <div class="col-4">
                     {{i.title}}
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                   <a href="{{url_for('deleteitem', itemid = i.id)}}">delete item</a>
+                </div>
+                <div class="col-4">
+                  <a href="{{url_for('updateitem', itemid = i.id)}}">edit item</a>
                 </div>
             </div>
             {%endif%} {%endfor%}

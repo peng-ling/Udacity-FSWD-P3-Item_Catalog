@@ -139,14 +139,16 @@ def newitem(categoryid):
     else:
         return render_template('newmetalitem.html', categoryid=categoryid)
 
-#--DELETEITEMS--------------------------------------------------------------------
+#--DELETEITEMS------------------------------------------------------------
 
-@app.route('/deleteitem/<int:itemid>',methods=['POST', 'GET'])
+
+@app.route('/deleteitem/<int:itemid>', methods=['POST', 'GET'])
 def deleteitem(itemid):
 
     if request.method == 'GET':
         _user_id = login_session['userid']
-        _itemToDelete = session.query(Item).filter_by(id=itemid, user_id=_user_id).first()
+        _itemToDelete = session.query(Item).filter_by(
+            id=itemid, user_id=_user_id).first()
         print '---------------'
         print _itemToDelete.id
         print '---------------'
@@ -155,6 +157,25 @@ def deleteitem(itemid):
 
     return redirect(url_for('metalitems'))
 
+#--UPDATEITEMS------------------------------------------------------------
+
+
+@app.route('/updateitem/<int:itemid>', methods=['POST', 'GET'])
+def updateitem(itemid):
+
+    if request.method == 'GET':
+        _user_id = login_session['userid']
+        _itemToUpdate = session.query(Item).filter_by(
+            id=itemid, user_id=_user_id).first()
+
+        return render_template('updatemetalitem.html', itemToUpdate=_itemToUpdate)
+
+    else:
+        session.query(Item).filter_by(id=itemid).update(
+            {"title": request.form['newitemtitle'], "description": request.form['newitemdescription']})
+        session.commit()
+
+    return redirect(url_for('metalitems'))
 
 if __name__ == '__main__':
     print app.url_map

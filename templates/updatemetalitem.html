@@ -1,0 +1,15 @@
+{% extends "topbar.html" %} {% block main %}
+
+<div>
+    <form method="post" action="{{url_for('updateitem', itemid = itemToUpdate.id)}}">
+        <div>
+            <input class="edit" type="text" value="{{itemToUpdate.title}}" name="newitemtitle">
+        </div>
+        <div>
+            <input class="edit" type="text" value="{{itemToUpdate.description}}" name="newitemdescription">
+        </div>
+        <button type="submit">Update item</button>
+    </form>
+</div>
+
+{% endblock %}
