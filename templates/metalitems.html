@@ -1,12 +1,10 @@
 {% extends "topbar.html" %} {% block main %}
-<div class="grid">
-    <h1>Welcome to the Heavy Metal Item Data Base</h1>
+<div class="row">
     <form method="post" action="/newcategory">
-        <div>
             <input type="text" placeholder="Category Name" name="newcategory">
-        </div>
         <button type="submit">Create new category</button>
     </form>
+    </div>
     <hr /> {%for c in categories %}
     <div class="row_margin_20">
         <div class="col-6">
@@ -30,5 +28,5 @@
         </div>
     </div>
     <hr /> {%endfor%}
-</div>
+
 {% endblock %}

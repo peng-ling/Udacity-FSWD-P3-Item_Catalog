@@ -1,16 +1,12 @@
 {% extends "topbar.html" %} {% block main %}
 
-<div>
-    <!---->
-    <form method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
-        <div>
+<form class="row_column "method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
+        <div class="col_100">
             <input type="text" placeholder="Item Name" name="newitemtitle">
-        </div>
-        <div>
             <input type="text" placeholder="Item Description" name="newitemdescription">
+            <button type="submit">Create new item</button>
         </div>
-        <button type="submit">Create new item</button>
-    </form>
-</div>
+</form>
+
 
 {% endblock %}

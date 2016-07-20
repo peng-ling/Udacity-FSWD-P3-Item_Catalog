@@ -18,11 +18,18 @@ APPLICATION_NAME = "Paul's Heavy Metal Item Database"
 @app.route('/')
 def startpage():
 
-    print login_session['logged_in']
-    if login_session['logged_in'] == False:
+    if 'logged_in' not in login_session:
+
+        print 'NONE'
+
         return redirect('/welcome')
 
-    return redirect(url_for('metalitems'))
+    else:
+
+        if login_session['logged_in'] == False:
+            return redirect('/welcome')
+
+        return redirect(url_for('metalitems'))
 
 
 @app.route('/welcome')
@@ -36,12 +43,19 @@ def welcome():
 @app.route('/metalitems')
 def metalitems():
 
-    if login_session['logged_in'] == False:
-        return redirect('/')
+    if 'logged_in' not in login_session:
 
-    _user_id = login_session['userid']
-    _categories = session.query(Category).filter_by(user_id=_user_id)
-    _items = session.query(Item).filter_by(user_id=_user_id)
+        return redirect('/welcome')
+
+    else:
+
+        if login_session['logged_in'] == False:
+
+            return redirect('/welcome')
+
+        _user_id = login_session['userid']
+        _categories = session.query(Category).filter_by(user_id=_user_id)
+        _items = session.query(Item).filter_by(user_id=_user_id)
 
     return render_template('metalitems.html', categories=_categories, items=_items)
 
@@ -54,22 +68,39 @@ def login():
 
     user = session.query(User).filter_by(username=_username).first()
 
+    print '--------------USER FOUND IN DB-----------------'
+
     if user is not None:
         if check_password_hash(user.password, _password) == True:
+            print '--------------USER PROVIDED CORRECT PW-----------------'
             login_session['logged_in'] = True
             login_session['userid'] = user.id
+            print '--------------SESSION COOKIE SET UP-----------------'
             _flashmessage = 'Hi ' + user.username + ', you did successfully log in.'
             flash(_flashmessage)
+            print '--------------FLASH MASTER OF THE UNIVERSE-----------------'
+            return redirect('metalitems')
+
         else:
+
             login_session['logged_in'] = False
             _flashmessage = user.username + ', did you forget your password? Try it again.'
             flash(_flashmessage)
 
+            print '--------------PW WRONG!!!-----------------'
+
+            return redirect('/welcome')
+
     else:
+
+        print '--------------USER NOT IN DB-----------------'
         _flashmessage = 'User does not exist, seems you need to sign up first.'
         flash(_flashmessage)
 
-    return redirect(url_for('metalitems'))
+        return redirect('/welcome')
+
+    print '--------------WHATS GOING WRONG HERE?-----------------'
+    # return redirect(url_for('metalitems'))
 
 
 @app.route('/logout', methods=['POST'])
@@ -78,7 +109,7 @@ def logout():
     login_session['logged_in'] = False
     flash('You were successfully logged out')
 
-    return render_template('metalitems.html')
+    return redirect(url_for('metalitems'))
 
 
 @app.route('/createuser', methods=['POST'])
