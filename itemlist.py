@@ -153,6 +153,26 @@ def newcategory():
 
     return redirect(url_for('metalitems'))
 
+
+@app.route('/deletecategory/<int:categoryid>', methods=['POST'])
+def deletecategory(categoryid):
+
+    if request.method == 'POST':
+        _user_id = login_session['userid']
+        print _user_id
+        print categoryid
+        _categoryToDelete = session.query(Category).filter_by(
+            id=categoryid, user_id=_user_id).first()
+
+        print '--------------------------'
+        print _categoryToDelete
+        print '--------------------------'
+
+        session.delete(_categoryToDelete)
+        session.commit()
+
+    return redirect(url_for('metalitems'))
+
 #--NEWITEMS--------------------------------------------------------------------
 
 
@@ -211,6 +231,6 @@ def updateitem(itemid):
 if __name__ == '__main__':
     print app.url_map
     app.secret_key = 'geheim'
-    app.debug = True
+    #app.debug = True
 
     app.run(host='0.0.0.0', port=5000)

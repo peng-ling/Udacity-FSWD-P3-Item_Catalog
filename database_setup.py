@@ -2,10 +2,10 @@ import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
-#import logging
+import logging
 
-#logging.basicConfig()
-#logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
 Base = declarative_base()
 
@@ -40,6 +40,7 @@ class Category(Base):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
+    item = relationship("Item", cascade="all,delete", backref="Category")
 
 
 class Item(Base):
@@ -50,9 +51,10 @@ class Item(Base):
     title = Column(String(250))
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey("category.id"))
-    category = relationship(Category)
+    #category = relationship(Category, cascade="all, delete")
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
+    category = relationship(Category)
 
     @property
     def serialize(self):

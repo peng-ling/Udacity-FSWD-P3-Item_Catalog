@@ -17,6 +17,12 @@
     background-color: #38a749;
 }
 
+.row_header {
+    display: flex;
+    height: 38px;
+    background-color: #2e818b;
+}
+
 .row_column {
     display: flex;
     background-color: #38a749;
@@ -77,4 +83,10 @@ div {
 }
 table {
     height: 100%
+}
+
+h2, a{
+  border: 2px;
+  padding: 2px;
+  margin: 4px;
 }
