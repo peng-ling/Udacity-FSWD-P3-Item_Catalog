@@ -151,6 +151,9 @@ def newcategory():
     session.add(newCategory)
     session.commit()
 
+    _flashmessage = 'Category ' + _categoryname + ' has been created!'
+    flash(_flashmessage)
+
     return redirect(url_for('metalitems'))
 
 
@@ -159,17 +162,15 @@ def deletecategory(categoryid):
 
     if request.method == 'POST':
         _user_id = login_session['userid']
-        print _user_id
-        print categoryid
         _categoryToDelete = session.query(Category).filter_by(
             id=categoryid, user_id=_user_id).first()
 
-        print '--------------------------'
-        print _categoryToDelete
-        print '--------------------------'
+        _flashmessage = 'Category ' + _categoryToDelete.name + ' has been deleted!'
 
         session.delete(_categoryToDelete)
         session.commit()
+
+        flash(_flashmessage)
 
     return redirect(url_for('metalitems'))
 
@@ -200,9 +201,7 @@ def deleteitem(itemid):
         _user_id = login_session['userid']
         _itemToDelete = session.query(Item).filter_by(
             id=itemid, user_id=_user_id).first()
-        print '---------------'
-        print _itemToDelete.id
-        print '---------------'
+
         session.delete(_itemToDelete)
         session.commit()
 
@@ -231,6 +230,6 @@ def updateitem(itemid):
 if __name__ == '__main__':
     print app.url_map
     app.secret_key = 'geheim'
-    #app.debug = True
+    app.debug = True
 
     app.run(host='0.0.0.0', port=5000)

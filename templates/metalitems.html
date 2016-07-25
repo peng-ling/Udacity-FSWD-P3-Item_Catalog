@@ -6,7 +6,7 @@
     </form>
 </div>
 <hr /> {%for c in categories %}
-<div class="row_header">
+<div class="row_header category">
     <h2>{{c.name}}</h2>
     <form method="get" action="{{url_for('newitem', categoryid = c.id)}}">
         <button type="submit">Create new item</button>
@@ -14,8 +14,13 @@
     <form method="post" action="{{url_for('deletecategory', categoryid = c.id)}}">
         <button type="submit">Delete Category</button>
     </form>
+    <form>
+        <button type="button" class="toggleitemsbutton" onclick="$('#toggleitem{{c.id}}').slideToggle();">
+            Show Hide Items
+        </button>
+    </form>
 </div>
-<div class="col_100">
+<div class="col_100 toggleitem" id="toggleitem{{c.id}}">
     {%for i in items%} {%if i.category_id is equalto c.id%}
     <div class="row">
         <div class="col_100">
@@ -29,6 +34,5 @@
         </div>
     </div>
     {%endif%} {%endfor%}
-</div>
 </div>
 <hr /> {%endfor%} {% endblock %}
