@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 import logging
 
-logging.basicConfig()
-logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+#logging.basicConfig()
+#logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
 Base = declarative_base()
 

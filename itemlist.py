@@ -19,16 +19,10 @@ APPLICATION_NAME = "Paul's Heavy Metal Item Database"
 def startpage():
 
     if 'logged_in' not in login_session:
-
-        print 'NONE'
-
         return redirect('/welcome')
-
     else:
-
         if login_session['logged_in'] == False:
             return redirect('/welcome')
-
         return redirect(url_for('metalitems'))
 
 
@@ -146,6 +140,10 @@ def adduser():
 def newcategory():
 
     _categoryname = request.form['newcategory']
+    if _categoryname == '':
+        _flashmessage = 'Name of Category must not be empty!'
+        flash(_flashmessage)
+        return redirect(url_for('metalitems'))
     _user_id = login_session['userid']
     newCategory = Category(name=_categoryname, user_id=_user_id)
     session.add(newCategory)
@@ -165,11 +163,12 @@ def deletecategory(categoryid):
         _categoryToDelete = session.query(Category).filter_by(
             id=categoryid, user_id=_user_id).first()
 
-        _flashmessage = 'Category ' + _categoryToDelete.name + ' has been deleted!'
+        _flashmessage = 'Category ' + _categoryToDelete.name + ' has been delete!'
 
         session.delete(_categoryToDelete)
         session.commit()
 
+        _flashmessage = 'Category ' + _categoryname + ' has been created!'
         flash(_flashmessage)
 
     return redirect(url_for('metalitems'))
@@ -181,13 +180,18 @@ def deletecategory(categoryid):
 def newitem(categoryid):
     if request.method == 'POST':
         _itemtitle = request.form['newitemtitle']
-        _itemdescription = request.form['newitemdescription']
-        _user_id = login_session['userid']
-        _newItem = Item(title=_itemtitle, description=_itemdescription,
-                        category_id=categoryid, user_id=_user_id)
-        session.add(_newItem)
-        session.commit()
-        return redirect(url_for('metalitems'))
+        if _itemtitle == '':
+            _flashmessage = 'Name of item must not be empty!'
+            flash(_flashmessage)
+            return render_template('newmetalitem.html', categoryid=categoryid)
+        else:
+            _itemdescription = request.form['newitemdescription']
+            _user_id = login_session['userid']
+            _newItem = Item(title=_itemtitle, description=_itemdescription,
+                            category_id=categoryid, user_id=_user_id)
+            session.add(_newItem)
+            session.commit()
+            return redirect(url_for('metalitems'))
     else:
         return render_template('newmetalitem.html', categoryid=categoryid)
 
@@ -230,6 +234,7 @@ def updateitem(itemid):
 if __name__ == '__main__':
     print app.url_map
     app.secret_key = 'geheim'
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.debug = True
 
     app.run(host='0.0.0.0', port=5000)

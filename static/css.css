@@ -11,25 +11,25 @@
     color: black;
     font-size: 16px;
 }
+.item_description {
+    background-color: #4a1933
+}
 .row {
     display: flex;
-    height: 38px;
     background-color: #38a749;
+    min-height: 38px;
 }
-
 .row_header {
     display: flex;
     height: 38px;
     background-color: #2e818b;
 }
-
 .row_column {
     display: flex;
     background-color: #38a749;
-    flex-direction: column;;
+    flex-direction: column;
+    ;
 }
-
-
 .row_flash {
     display: flex;
     height: 38px;
@@ -45,6 +45,9 @@
     display: flex;
     justify-content: flex-start;
     align-content: flex-end;
+}
+.col_25 {
+    width: 25%;
 }
 .col_50 {
     width: 50%;
@@ -84,9 +87,9 @@ div {
 table {
     height: 100%
 }
-
-h2, a{
-  border: 2px;
-  padding: 2px;
-  margin: 4px;
+h2, a {
+    border: 2px;
+    padding: 2px;
+    margin: 4px;
+    font-weight: bold;
 }

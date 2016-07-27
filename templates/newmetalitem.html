@@ -1,12 +1,12 @@
 {% extends "topbar.html" %} {% block main %}
-
 <form class="row_column "method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
         <div class="col_100">
             <input type="text" placeholder="Item Name" name="newitemtitle">
             <input type="text" placeholder="Item Description" name="newitemdescription">
             <button type="submit">Create new item</button>
+            <form method="post" action="{{url_for('metalitems')}}">
+                <button type="submit">Cancel</button>
+            </form>
         </div>
 </form>
-
-
 {% endblock %}
