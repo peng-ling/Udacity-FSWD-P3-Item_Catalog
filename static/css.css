@@ -22,7 +22,13 @@
 .row_header {
     display: flex;
     height: 38px;
-    background-color: #2e818b;
+    /*color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;*/
+}
 }
 .row_column {
     display: flex;
@@ -67,11 +73,15 @@ input {
     border-color: black;
 }
 button {
-    border: 2px;
-    border-color: black;
+    border: 1px;
+    color: #333;
+    border-color: #ccc;
+    background-color: #fff;
     border-style: solid;
     padding: 4px;
     margin: 4px;
+    text-align: center;
+    border-radius: 4px;
 }
 tr {
     height: 100%

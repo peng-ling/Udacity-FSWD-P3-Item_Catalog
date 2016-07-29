@@ -7,11 +7,12 @@
             <button type="button" onclick="toggleAllItems()">
                 Show / hide all items
             </button>
+            <input class="filteritmes" type="text" placeholder="Filter!" onkeyup="Filter($('.filteritems').value())">
         </form>
     </div>
 </div>
 <hr /> {%for c in categories %}
-<div class="row_header">
+<div class="row_header panel panel-primary panel-heading">
     <h2 class="col_25">{{c.name}}</h2>
     <form method="get" action="{{url_for('newitem', categoryid = c.id)}}">
         <button type="submit">Create new item</button>

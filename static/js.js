@@ -3,3 +3,7 @@ function toggleAllItems() {
         $(this).toggle();
     });
 }
+
+function Filter(filterstring) {
+console.log(filterstring);
+}

@@ -7,60 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <!--link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"-->
     <title>Paul's Heavy Metal Items Data Base</title>
-    <link href="../static/css.css" rel="stylesheet">
+    <!--link href="../static/css.css" rel="stylesheet"-->
     <link rel="shortcut icon" href="../static/favicon.ico" />
     <script src="../static/jquery-3.1.0.js"></script>
     <script src="../static/js.js"></script>
+    <link href="../static/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body>
-    <div class="row">
-        <div class="col_50">
-            <div class="row_start">
-                <table>
-                    <tr>
-                        <td>Paul's Heavy Metal Items Data Base</td>
-                    </tr>
-                </table>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Paul's Metal Items</a>
             </div>
+            {%if not session['logged_in'] %}
+            <form class="navbar-form navbar-right" method="post" action="/createuser">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Sign up</button>
+                </div>
+            </form>
+            <form class="navbar-form navbar-right" method="post" action="/login">
+                <div class="form-group">
+                    <input type="text" placeholder="username" class="form-control" name="username">
+                    <input type="password" placeholder="password" class="form-control" name="password">
+                    <button type="submit" class="btn btn-default">Sign in</button>
+                </div>
+            </form>
+            {%endif%} {%if session['logged_in'] %}
+            <form class="navbar-form navbar-right" method="post" action="/logout">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Log out</button>
+                </div>
+            </form>
+            {%endif%}
         </div>
-        <div class="col_50">
-            <div class="row_end">
-                {%if not session['logged_in'] %}
-                <form method="post" action="/createuser">
-                    <button type="submit">Sign up</button>
-                </form>
-                <form method="post" action="/login">
-                    <input type="text" placeholder="Username" name="username">
-                    <input type="password" placeholder="Password" name="password">
-                    <button type="submit">Log in</button>
-                </form>
-                {%endif%} {%if session['logged_in'] %}
-                <form method="post" action="/logout">
-                    <button type="submit">Log out</button>
-                </form>
-                {%endif%}
-            </div>
-        </div>
-    </div>
-    <div class="row_flash">
-        <div class="col_100">
-            {% with messages = get_flashed_messages() %} {% if messages %}
-            <div class=flashes>
-                <table>
-                    <tr>
-                        {% for message in messages %}
-                        <td>{{ message }}</td>
-                        {% endfor %}
-                    </tr>
-                </table>
-            </div>
-            {%endif%} {%endwith%}
-        </div>
-    </div>
-    <hr /> {% block createuser %} {% endblock %} {% block welcome %} {% endblock %} {% block main %} {% endblock %}
+    </nav>{% block createuser %} {% endblock %} {% block welcome %} {% endblock %} {% block main %} {% endblock %}
 </body>
-
-</html>
