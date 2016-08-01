@@ -1,13 +1,9 @@
 {% extends "topbar.html" %} {% block welcome %}
-<h1>Welcome to the Heavy Metal Item Data Base</h1>
-<h2>The place were metal items dwell</h2>
-{% if session.logged_in %}
-<div>
-    logged in
-</div>
+<div class="container">
 
-{% else %}
-<div>
-    logged out
+    <div class="jumbotron">
+        <h1>Welcome to the Heavy Metal Item Data Base</h1>
+        <h2>The place were metal items dwell</h2>
+    </div>
 </div>
-{% endif %} {% endblock %}
+{% endblock %}
