@@ -9,16 +9,16 @@
     <meta name="author" content="">
     <!--link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"-->
     <title>Paul's Heavy Metal Items Data Base</title>
-    <!--link href="../static/css.css" rel="stylesheet"-->
     <link rel="shortcut icon" href="../static/favicon.ico" />
     <script src="../static/jquery-3.1.0.js"></script>
     <script src="../static/js.js"></script>
     <link href="../static/bootstrap.min.css" rel="stylesheet" />
+    <link href="../static/css.css" rel="stylesheet">
 </head>
 
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
+    <div class="container">
+        <nav class="navbar navbar-default">
             <div class="navbar-header">
                 <a class="navbar-brand" href="#">Paul's Metal Items</a>
             </div>
@@ -42,6 +42,6 @@
                 </div>
             </form>
             {%endif%}
-        </div>
-    </nav>{% block createuser %} {% endblock %} {% block welcome %} {% endblock %} {% block main %} {% endblock %}
+        </nav>
+    </div>{% block createuser %} {% endblock %} {% block welcome %} {% endblock %} {% block main %} {% endblock %}
 </body>

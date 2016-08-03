@@ -1,49 +1,42 @@
 {% extends "topbar.html" %} {% block main %}
-<div class="row">
-    <div class="col_100">
-        <form method="post" action="/newcategory">
-            <input class="col_25" type="text" placeholder="Category Name" name="newcategory" id="newcategory">
-            <button type="submit">Create new category</button>
-            <button type="button" onclick="toggleAllItems()">
-                Show / hide all items
-            </button>
-            <input class="filteritmes" type="text" placeholder="Filter!" onkeyup="Filter($('.filteritems').value())">
-        </form>
-    </div>
-</div>
-<hr /> {%for c in categories %}
-<div class="row_header panel panel-primary panel-heading">
-    <h2 class="col_25">{{c.name}}</h2>
-    <form method="get" action="{{url_for('newitem', categoryid = c.id)}}">
-        <button type="submit">Create new item</button>
-    </form>
-    <form method="post" action="{{url_for('deletecategory', categoryid = c.id)}}">
-        <button type="submit">Delete Category</button>
-    </form>
-    <form>
-        <button type="button" onclick="$('#toggleitem{{c.id}}').slideToggle();">
-            Show Hide Items
+<div class="container">
+    <form class="form-inline" method="post" action="/newcategory">
+        <input class="form-control" type="text" placeholder="Category Name" name="newcategory" id="newcategory">
+        <button class="btn btn-default" type="submit">Create new category</button>
+        <button class="btn btn-default" type="button" onclick="toggleAllItems()">
+            Show / hide all items
         </button>
+        <input class="filteritmes form-control" type="text" placeholder="Filter!" onkeyup="Filter($('.filteritems').value())">
     </form>
+    <hr />
 </div>
-<div class="col_100 toggleitem" id="toggleitem{{c.id}}">
-    {%for i in items%} {%if i.category_id is equalto c.id%}
-    <div class="row ">
-        <div class="col_25">
-            {{i.title}}
+<div class="container">
+    {%for c in categories %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2>{{c.name}}</h2>
+            <form class="form-inline">
+                <button class="btn btn-default" formmethod="get" formaction="{{url_for('newitem', categoryid = c.id)}}" type="submit">Create new item</button>
+                <button class="btn btn-default" type="submit">Delete Category</button>
+                <button class="btn btn-default" formmethod="post" formaction="{{url_for('deletecategory', categoryid = c.id)}}" type="button" onclick="$('#toggleitem{{c.id}}').slideToggle();">
+                    Show Hide Items</button>
+            </form>
         </div>
-        <div>
-            <a href="{{url_for('deleteitem', itemid = i.id)}}">delete item</a>
-        </div>
-        <div>
-            <a href="{{url_for('updateitem', itemid = i.id)}}">edit item</a>
+        <div class="panel-body" id="toggleitem{{c.id}}">
+            {%for i in items%} {%if i.category_id is equalto c.id%}
+            <h3>
+                {{i.title}}
+          </h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{url_for('deleteitem', itemid = i.id)}}">delete item</a>
+                    <a href="{{url_for('updateitem', itemid = i.id)}}">edit item</a>
+                </div>
+            </div>
+            <div class="top-buffer">
+                {{i.description}}
+            </div>
+            <hr> {%endif%} {%endfor%}
         </div>
     </div>
-    <div class="row">
-        <div class="col_100 item_description">
-            {{i.description}}
-        </div>
-    </div>
-    {%endif%} {%endfor%}
-</div>
-<hr /> {%endfor%} {% endblock %}
+    {%endfor%} </div> {% endblock %}

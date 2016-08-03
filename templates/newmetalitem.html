@@ -1,12 +1,15 @@
 {% extends "topbar.html" %} {% block main %}
-<form class="row_column "method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
-        <div class="col_100">
-            <input type="text" placeholder="Item Name" name="newitemtitle">
-            <input type="text" placeholder="Item Description" name="newitemdescription">
-            <button type="submit">Create new item</button>
+<div class="container">
+    <div class="jumbotron">
+        <h2>Create a new Item for category</h2>
+        <form class="form" method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
+            <input class="form-control" type="text" placeholder="Item Name" name="newitemtitle">
+            <textarea class="form-control big_input" rows="1" cols="26" name="newitemdescription"></textarea>
+            <button class="btn btn-default" type="submit">Create new item</button>
             <form method="post" action="{{url_for('metalitems')}}">
-                <button type="submit">Cancel</button>
+                <button class="btn btn-default" type="submit">Cancel</button>
             </form>
-        </div>
-</form>
+        </form>
+    </div>
+</div>
 {% endblock %}
