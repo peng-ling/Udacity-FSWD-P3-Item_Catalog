@@ -1,7 +1,7 @@
 {% extends "topbar.html" %} {% block main %}
 <div class="container">
     <div class="jumbotron">
-        <h2>Create a new Item for category</h2>
+        <h2>Create a new item for category {{categoryname}}</h2>
         <form class="form" method="post" action="{{url_for('newitem', categoryid = categoryid)}}">
             <input class="form-control" type="text" placeholder="Item Name" name="newitemtitle">
             <textarea class="form-control big_input" rows="1" cols="26" name="newitemdescription"></textarea>

@@ -133,7 +133,7 @@ def adduser():
     _flashmessage = 'Welcome ' + user.username + '! Log in to start.'
     flash(_flashmessage)
 
-    return render_template('metalitems.html')
+    return render_template('welcome.html')
 
 
 @app.route('/newcategory', methods=['POST'])
@@ -191,9 +191,13 @@ def newitem(categoryid):
                             category_id=categoryid, user_id=_user_id)
             session.add(_newItem)
             session.commit()
+            _flashmessage = 'Item ' + _itemtitle + ' has been created.'
+            flash(_flashmessage)
             return redirect(url_for('metalitems'))
     else:
-        return render_template('newmetalitem.html', categoryid=categoryid)
+        _category = session.query(Category).filter_by(
+            id=categoryid).first()
+        return render_template('newmetalitem.html', categoryid=categoryid, categoryname=_category.name)
 
 #--DELETEITEMS------------------------------------------------------------
 

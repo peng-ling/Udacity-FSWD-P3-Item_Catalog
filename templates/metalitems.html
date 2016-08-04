@@ -22,7 +22,7 @@
                     Show Hide Items</button>
             </form>
         </div>
-        <div class="panel-body" id="toggleitem{{c.id}}">
+        <div class="panel-body toggleall" id="toggleitem{{c.id}}">
             {%for i in items%} {%if i.category_id is equalto c.id%}
             <h3>
                 {{i.title}}

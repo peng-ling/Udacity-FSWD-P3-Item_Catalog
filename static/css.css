@@ -8,3 +8,10 @@ hr:last-of-type {
 .top-buffer {
     margin-top: 20px;
 }
+.flash {
+    color: red !important;
+}
+.navbar-right-last {
+    margin-right: 15px !important;
+    padding-right: 0px !important;
+}
