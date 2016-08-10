@@ -1,0 +1,14 @@
+{% extends "topbar.html" %} {% block main %}
+<div class="container">
+    <div class="jumbotron">
+        <h2>Edit Category</h2>
+        <form class="form" method="post" action="{{url_for('updatecategory', categoryid = categoryToUpdate.id)}}">
+            <input class="form-control" type="text" value="{{categoryToUpdate.name}}" name="newcategoryname">
+            <button class="btn btn-default" type="submit">Update category</button>
+            <form method="post" action="{{url_for('metalitems')}}">
+                <button class="btn btn-default" type="submit">Cancel</button>
+            </form>
+        </form>
+    </div>
+</div>
+{% endblock %}

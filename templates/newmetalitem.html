@@ -6,7 +6,8 @@
             <input class="form-control" type="text" placeholder="Item Name" name="newitemtitle">
             <textarea class="form-control big_input" rows="1" cols="26" name="newitemdescription"></textarea>
             <button class="btn btn-default" type="submit">Create new item</button>
-            <form method="post" action="{{url_for('metalitems')}}">
+            </form>
+            <form method="get" action="{{url_for('metalitems')}}">
                 <button class="btn btn-default" type="submit">Cancel</button>
             </form>
         </form>

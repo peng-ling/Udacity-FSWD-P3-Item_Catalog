@@ -1,14 +1,18 @@
-/* $('#toggleitem{{c.id}}').slideToggle();
-$("[id^=main]")
-*/
+itemVisibleState = true;
 
 function toggleAllItems() {
     $(".toggleall").each(function() {
-        console.log(this);
-        $(this).toggle();
+        if (itemVisibleState === true) {
+            $(this).hide("medium");
+        } else {
+            $(this).show("medium");
+        }
     });
-}
-
-function Filter(filterstring) {
-    console.log(filterstring);
+    if (itemVisibleState === true) {
+        itemVisibleState = false;
+        console.log(itemVisibleState);
+    } else {
+        itemVisibleState = true;
+        console.log(itemVisibleState);
+    }
 }

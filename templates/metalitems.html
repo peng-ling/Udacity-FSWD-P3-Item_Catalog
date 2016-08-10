@@ -6,7 +6,6 @@
         <button class="btn btn-default" type="button" onclick="toggleAllItems()">
             Show / hide all items
         </button>
-        <input class="filteritmes form-control" type="text" placeholder="Filter!" onkeyup="Filter($('.filteritems').value())">
     </form>
     <hr />
 </div>
@@ -17,8 +16,9 @@
             <h2>{{c.name}}</h2>
             <form class="form-inline">
                 <button class="btn btn-default" formmethod="get" formaction="{{url_for('newitem', categoryid = c.id)}}" type="submit">Create new item</button>
-                <button class="btn btn-default" type="submit">Delete Category</button>
-                <button class="btn btn-default" formmethod="post" formaction="{{url_for('deletecategory', categoryid = c.id)}}" type="button" onclick="$('#toggleitem{{c.id}}').slideToggle();">
+                <button class="btn btn-default" formmethod="get" formaction="{{url_for('updatecategory', categoryid = c.id)}}" type="submit">Edit Category</button>
+                <button class="btn btn-default" formmethod="post" formaction="{{url_for('deletecategory', categoryid = c.id)}}" type="submit">Delete Category</button>
+                <button class="btn btn-default" type="button" onclick="$('#toggleitem{{c.id}}').slideToggle();">
                     Show Hide Items</button>
             </form>
         </div>
@@ -36,7 +36,7 @@
             <div class="top-buffer">
                 {{i.description}}
             </div>
-            <hr> {%endif%} {%endfor%}
+            {%endif%} {%endfor%}
         </div>
     </div>
     {%endfor%} </div> {% endblock %}

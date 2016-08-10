@@ -4,7 +4,7 @@
         <h2>Edit item</h2>
         <form class="form" method="post" action="{{url_for('updateitem', itemid = itemToUpdate.id)}}">
             <input class="form-control" type="text" value="{{itemToUpdate.title}}" name="newitemtitle">
-            <textarea class="form-control big_input" rows="1" cols="26" value="{{itemToUpdate.description}}" name="newitemdescription"></textarea>
+            <textarea class="form-control big_input" rows="1" cols="26"  name="newitemdescription">{{itemToUpdate.description}}</textarea>
             <button class="btn btn-default" type="submit">Update item</button>
             <form method="post" action="{{url_for('metalitems')}}">
                 <button class="btn btn-default" type="submit">Cancel</button>
