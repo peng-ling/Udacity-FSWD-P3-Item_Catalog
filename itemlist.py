@@ -244,11 +244,14 @@ def deletecategory(categoryid):
 
     return redirect(url_for('metalitems'))
 
-#--NEWITEMS--------------------------------------------------------------------
+# NEWITEMS
+# user can add new items to a category here
 
 
 @app.route('/newitem/<int:categoryid>', methods=['POST', 'GET'])
 def newitem(categoryid):
+    # If user clicks button add item, check if item title is not an ampty
+    # string. Then store the new item in table items.
     if request.method == 'POST':
         _itemtitle = request.form['newitemtitle']
         if _itemtitle == '':
@@ -262,9 +265,12 @@ def newitem(categoryid):
                             category_id=categoryid, user_id=_user_id)
             session.add(_newItem)
             session.commit()
+# Let the user know his new item has been safed.
             _flashmessage = 'Item ' + _itemtitle + ' has been created.'
             flash(_flashmessage)
+# Return to main page
             return redirect(url_for('metalitems'))
+# If request is not post but get go here (comming from main page metalitems)
     else:
         _category = session.query(Category).filter_by(
             id=categoryid).first()
@@ -272,6 +278,7 @@ def newitem(categoryid):
                                categoryname=_category.name)
 
 # DELETEITEMS
+# go here when a user clicks on delete link for an specific item.
 
 
 @app.route('/deleteitem/<int:itemid>', methods=['POST', 'GET'])
@@ -284,15 +291,19 @@ def deleteitem(itemid):
 
         session.delete(_itemToDelete)
         session.commit()
-
+# Let the user know that his item has been deleted.
+        _flashmessage = 'Item ' + _itemToDelete.title \
+            + ' has been deleted.'
+        flash(_flashmessage)
+# return to main page
     return redirect(url_for('metalitems'))
 
 # UPDATEITEMS
-
+# Go here in case a user whants to update an existing item.
 
 @app.route('/updateitem/<int:itemid>', methods=['POST', 'GET'])
 def updateitem(itemid):
-
+# If request is get go here and show site where one can edit an existing item.
     if request.method == 'GET':
         _user_id = login_session['userid']
         _itemToUpdate = session.query(Item).filter_by(
@@ -300,7 +311,7 @@ def updateitem(itemid):
 
         return render_template('updatemetalitem.html',
                                itemToUpdate=_itemToUpdate)
-
+# Go here when user has updatet his item und clicks the save button.
     else:
         _user_id = login_session['userid']
         _itemToUpdate = session.query(Item).filter_by(
@@ -310,7 +321,7 @@ def updateitem(itemid):
             {"title": request.form['newitemtitle'],
              "description": request.form['newitemdescription']})
         session.commit()
-
+# Let the user know that his item has been updated.
         _flashmessage = 'Item ' + _itemToUpdate.title \
                         + ' has been updated.'
         flash(_flashmessage)

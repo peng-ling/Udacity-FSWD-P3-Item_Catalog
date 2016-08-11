@@ -4,9 +4,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 import logging
 
-#logging.basicConfig()
-#logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+# Uncomment for some more detailed logging
+# logging.basicConfig()
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
+# Environment setup
 Base = declarative_base()
 
 engine = create_engine('sqlite:///itemcatalog.db', echo=True)
@@ -19,7 +21,7 @@ DBSession = sessionmaker(bind=engine)
 
 session = DBSession()
 
-# schakka
+# Table where User Information is stored, incl. password
 
 
 class User(Base):
@@ -31,7 +33,7 @@ class User(Base):
     password = Column(String(250))
 
 
-
+# Table for categories, cascades delete to related items.
 class Category(Base):
 
     __tablename__ = "category"
@@ -41,6 +43,8 @@ class Category(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
     item = relationship("Item", cascade="all,delete", backref="Category")
+
+# Table where items are stored.
 
 
 class Item(Base):
