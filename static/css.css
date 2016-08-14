@@ -15,3 +15,12 @@ hr:last-of-type {
     margin-right: 15px !important;
     padding-right: 0px !important;
 }
+#signinButton {
+    height: 34px;
+}
+[id="___signin_0"] {
+    height: 34px !important;
+}
+iframe {
+    height: 34px !important;
+}
