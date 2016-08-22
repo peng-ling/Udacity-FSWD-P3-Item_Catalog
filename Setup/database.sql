@@ -9,7 +9,8 @@ DROP TABLE USER;
 
 CREATE TABLE USER (id Integer PRIMARY KEY,
                                       username String(250),
-                                      password String(250));
+                                      password String(250),
+                                      email String (250));
 
 --DROP TABLE restaurant;
 
