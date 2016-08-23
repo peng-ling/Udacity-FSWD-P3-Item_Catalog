@@ -3,8 +3,19 @@
     <div class="jumbotron">
         <h2>Edit item</h2>
         <form class="form" method="post" action="{{url_for('updateitem', itemid = itemToUpdate.id)}}">
+            <div class="dropdown">
+
+                <select class="form-control" name="chosencategory">
+                    {%for c in categories %}
+                    <option {%if c.id is equalto itemToUpdate.category_id%}selected="selected" {%endif%}>
+                        {{c.name}}
+                    </option>
+                    {%endfor%}
+                </select>
+
+            </div>
             <input class="form-control" type="text" value="{{itemToUpdate.title}}" name="newitemtitle">
-            <textarea class="form-control big_input" rows="1" cols="26"  name="newitemdescription">{{itemToUpdate.description}}</textarea>
+            <textarea class="form-control big_input" rows="1" cols="26" name="newitemdescription">{{itemToUpdate.description}}</textarea>
             <button class="btn btn-default" type="submit">Update item</button>
             <form method="post" action="{{url_for('metalitems')}}">
                 <button class="btn btn-default" type="submit">Cancel</button>

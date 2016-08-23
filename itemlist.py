@@ -114,6 +114,7 @@ def login():
             # If user logged in successfully set session cookie accordingly.
             login_session['logged_in'] = True
             login_session['userid'] = user.id
+            login_session['method'] = 'LOCAL'
 # Welcome the user
             _flashmessage = 'Hi ' + user.username \
                 + ', you did successfully log in.'
@@ -145,9 +146,36 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-
-    login_session['logged_in'] = False
-    flash('You were successfully logged out')
+    if login_session['method'] == 'LOCAL':
+        login_session['logged_in'] = False
+        flash('You were successfully logged out')
+    elif login_session['method'] == 'OAUTH':
+        access_token = login_session['access_token']
+        if access_token is None:
+            response = make_response(json.dumps(
+                'Current user not connected.'), 401)
+            response.headers['Content-Type'] = 'application/json'
+            return response
+        url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session[
+            'access_token']
+        h = httplib2.Http()
+        result = h.request(url, 'GET')[0]
+        if result['status'] == '200':
+            login_session['logged_in'] = False
+            del login_session['access_token']
+            del login_session['gplus_id']
+            del login_session['username']
+            del login_session['email']
+            # response = make_response(json.dumps(
+            #    'Successfully disconnected.'), 200)
+            #response.headers['Content-Type'] = 'application/json'
+            # return response
+            redirect(url_for('welcome'))
+        else:
+            response = make_response(json.dumps(
+                'Failed to revoke token for given user.', 400))
+            response.headers['Content-Type'] = 'application/json'
+            return response
 
     return redirect(url_for('metalitems'))
 
@@ -341,18 +369,23 @@ def updateitem(itemid):
         _user_id = login_session['userid']
         _itemToUpdate = session.query(Item).filter_by(
             id=itemid, user_id=_user_id).first()
+        _categories = session.query(Category).filter_by(user_id=_user_id)
 
         return render_template('updatemetalitem.html',
-                               itemToUpdate=_itemToUpdate)
+                               itemToUpdate=_itemToUpdate, categories=_categories)
 # Go here when user has updatet his item und clicks the save button.
     else:
         _user_id = login_session['userid']
         _itemToUpdate = session.query(Item).filter_by(
             id=itemid, user_id=_user_id).first()
+        print(request.form['chosencategory'])
+        _newcategory = session.query(Category).filter_by(
+            name=request.form['chosencategory']).first()
 
         session.query(Item).filter_by(id=itemid).update(
             {"title": request.form['newitemtitle'],
-             "description": request.form['newitemdescription']})
+             "description": request.form['newitemdescription'],
+             "category_id": _newcategory.id})
         session.commit()
 # Let the user know that his item has been updated.
         _flashmessage = 'Item ' + _itemToUpdate.title \
@@ -450,6 +483,7 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+    login_session['method'] = 'OAUTH'
 
     # check if user is already in user table if not create user
     if getUserId(login_session['email']) is None:
@@ -461,38 +495,11 @@ def gconnect():
 
     login_session['userid'] = getUserId(login_session['email'])
 
-    return 'L'  # redirect(url_for('metalitems'))
+    response = make_response(json.dumps(
+        'Sucsessfully Loged in'), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
-# OAUTH LOGOUT
-
-
-@app.route('/gdisconnect')
-def gdisconnect():
-    access_token = login_session['access_token']
-
-    if access_token is None:
-        response = make_response(json.dumps(
-            'Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session[
-        'access_token']
-    h = httplib2.Http()
-    result = h.request(url, 'GET')[0]
-    if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        del login_session['username']
-        del login_session['email']
-        response = make_response(json.dumps(
-            'Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
-    else:
-        response = make_response(json.dumps(
-            'Failed to revoke token for given user.', 400))
-        response.headers['Content-Type'] = 'application/json'
-        return response
 
 # MAIN
 
