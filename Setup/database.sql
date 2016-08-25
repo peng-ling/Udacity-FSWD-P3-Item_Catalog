@@ -25,11 +25,12 @@ CREATE TABLE item (id Integer PRIMARY KEY, title String(250), description String
 
 
 CREATE VIEW Serialize AS
-SELECT u.id,
+SELECT i.id,
        u.username,
        c.name AS category_name,
        i.title AS item_title,
-       i.description AS item_description
+       i.description AS item_description,
+       u.id AS user_id
 FROM USER u
 LEFT OUTER JOIN category c ON u.id = c.user_id
 LEFT OUTER JOIN item i ON i.category_id = C.id ;

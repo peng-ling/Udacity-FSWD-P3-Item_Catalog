@@ -21,6 +21,28 @@ DBSession = sessionmaker(bind=engine)
 
 session = DBSession()
 
+
+class Seri(Base):
+
+    __tablename__ = "serialize"
+
+    id = Column(Integer(), primary_key=True)
+    username = Column(String(), primary_key=True)
+    user_id = Column(Integer(), primary_key=True)
+    category_name = Column(String(), primary_key=True)
+    item_title = Column(String(), primary_key=True)
+    item_description = Column(String(), primary_key=True)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'category_name': self.category_name,
+            'item_title': self.item_title,
+            'item_description': self.item_description
+        }
+
 # Table where User Information is stored, incl. password
 
 
@@ -56,16 +78,6 @@ class Item(Base):
     title = Column(String(250))
     description = Column(String(250))
     category_id = Column(Integer, ForeignKey("category.id"))
-    #category = relationship(Category, cascade="all, delete")
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
     category = relationship(Category)
-
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'title': self.course,
-            'description': self.description,
-            'category_id': self.category_id
-        }

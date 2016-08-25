@@ -9,7 +9,7 @@ from flask import make_response
 import requests
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, session, Category, Item, User
+from database_setup import Base, session, Category, Item, User, Seri
 # Required for Oauth
 import httplib2
 from oauth2client.client import flow_from_clientsecrets
@@ -284,6 +284,7 @@ def updatecategory(categoryid):
         return redirect(url_for('metalitems'))
 
 # DELETE CATEGORY
+# gets invoked once a user deletes a category.
 
 
 @app.route('/deletecategory/<int:categoryid>', methods=['POST'])
@@ -297,6 +298,7 @@ def deletecategory(categoryid):
 # Tell user category has been deleted.
         _flashmessage = 'Category ' + _categoryToDelete.name \
             + ' has been delete!'
+        flash(_flashmessage)
 # Do it!
         session.delete(_categoryToDelete)
         session.commit()
@@ -498,7 +500,23 @@ def gconnect():
     response = make_response(json.dumps(
         'Sucsessfully Loged in'), 200)
     response.headers['Content-Type'] = 'application/json'
+
+    _flashmessage = 'Hi ' + data['name'] \
+        + ', you did successfully log in.'
+    flash(_flashmessage)
+
     return response
+    #-----------
+
+
+@app.route('/serialize', methods=['GET'])
+def serialize():
+
+        # filter_by(restaurant_id=restaurant.id)
+    _items = session.query(Seri).filter_by(user_id=login_session['userid'])
+    session.commit()
+
+    return jsonify(Metalitems=[i.serialize for i in _items])
 
 
 # MAIN
