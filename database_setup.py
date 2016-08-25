@@ -26,18 +26,20 @@ class Seri(Base):
 
     __tablename__ = "serialize"
 
-    id = Column(Integer(), primary_key=True)
+    item_id = Column(Integer(), primary_key=True)
     username = Column(String(), primary_key=True)
     user_id = Column(Integer(), primary_key=True)
     category_name = Column(String(), primary_key=True)
+    category_id = Column(Integer(), primary_key=True)
     item_title = Column(String(), primary_key=True)
     item_description = Column(String(), primary_key=True)
 
     @property
     def serialize(self):
         return {
-            'id': self.id,
+            'item_id': self.item_id,
             'username': self.username,
+            'category_id': self.category_id,
             'category_name': self.category_name,
             'item_title': self.item_title,
             'item_description': self.item_description

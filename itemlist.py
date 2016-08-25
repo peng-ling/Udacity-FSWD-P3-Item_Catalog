@@ -17,20 +17,30 @@ from oauth2client.client import FlowExchangeError
 
 app = Flask(__name__)
 
+# Get client id from client_secrect.json for google oauth
 CLIENT_ID = json.loads(open('client_secret.json', 'r').read())[
     'web']['client_id']
 
+# Its about Metal!
 APPLICATION_NAME = "Paul's Heavy Metal Item Database"
+
+# Check if user is already in User Table.
+# Used in gconnect to create a none existing user.
 
 
 def getUserId(email):
+    # check if user with email provided from google is already there  and..
     try:
         user = session.query(User).filter_by(
             email=login_session['email']).one()
+    # if so return his user id which is used to show only his stuff.
         return user.id
-
+   # If user is not there return none in this case
+   # createUser is invoked to creat him on the fly.
     except:
         return None
+
+# creates a user how log in using google oauth the first time.
 
 
 def createUser():
@@ -41,6 +51,29 @@ def createUser():
     session.commit()
     user = session.query(User).filter_by(email=login_session['email']).one()
     return user.id
+
+# checks if user is propperly loged on, used for almost every route.
+
+
+def isauthorized():
+    # prepare flash message used in case user is not loged in
+    _flashmessage = 'Unauthorized!'
+# Check if key loged_in is available in login_session
+    if 'logged_in' not in login_session:
+        flash(_flashmessage)
+        return False
+# Check if user is not loged in.
+    elif login_session['logged_in'] == False:
+        flash(_flashmessage)
+        return False
+# Yeah! a authorized user is trying to access his Meatl Items!
+    elif login_session['logged_in'] == True:
+
+        return True
+# Send the unauthorized user back to start.
+    else:
+        flash(_flashmessage)
+        return False
 
 
 # ROOT
@@ -64,8 +97,11 @@ def startpage():
 
 @app.route('/welcome')
 def welcome():
+    # Create random state variable which is used for google oauth to avoid
+    # cross side attacks.
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
+    # Create state key and value in login_session.
     login_session['state'] = state
 
     return render_template('welcome.html', STATE=state)
@@ -146,9 +182,15 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+# Check if user is loged in by local DB credentials...
     if login_session['method'] == 'LOCAL':
         login_session['logged_in'] = False
         flash('You were successfully logged out')
+# if not invoke google oauth logout procedure.
     elif login_session['method'] == 'OAUTH':
         access_token = login_session['access_token']
         if access_token is None:
@@ -224,6 +266,11 @@ def adduser():
 
 @app.route('/newcategory', methods=['POST'])
 def newcategory():
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+
     # Get name of new category from request and check if its not an empty
     # string.
     _categoryname = request.form['newcategory']
@@ -250,6 +297,10 @@ def newcategory():
 
 @app.route('/updatecategory/<int:categoryid>', methods=['GET', 'POST'])
 def updatecategory(categoryid):
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
 
     # Go here in case user clicks on update categroy button on metal items
     # page.
@@ -289,6 +340,11 @@ def updatecategory(categoryid):
 
 @app.route('/deletecategory/<int:categoryid>', methods=['POST'])
 def deletecategory(categoryid):
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+
     # Make sure site is only accessible by clicking the button and not by typing
     # url in browser.
     if request.method == 'POST':
@@ -311,6 +367,11 @@ def deletecategory(categoryid):
 
 @app.route('/newitem/<int:categoryid>', methods=['POST', 'GET'])
 def newitem(categoryid):
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+
     # If user clicks button add item, check if item title is not an ampty
     # string. Then store the new item in table items.
     if request.method == 'POST':
@@ -345,6 +406,10 @@ def newitem(categoryid):
 @app.route('/deleteitem/<int:itemid>', methods=['POST', 'GET'])
 def deleteitem(itemid):
 
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+
     if request.method == 'GET':
         _user_id = login_session['userid']
         _itemToDelete = session.query(Item).filter_by(
@@ -365,6 +430,11 @@ def deleteitem(itemid):
 
 @app.route('/updateitem/<int:itemid>', methods=['POST', 'GET'])
 def updateitem(itemid):
+
+    # Check if user is authorized
+    if isauthorized() == False:
+        return redirect('/welcome')
+
     # If request is get go here and show site where one can edit an existing
     # item.
     if request.method == 'GET':
@@ -506,18 +576,24 @@ def gconnect():
     flash(_flashmessage)
 
     return response
-    #-----------
+
+# SERIALIZE
+# Returns data for a user as a nice json
 
 
 @app.route('/serialize', methods=['GET'])
 def serialize():
 
-        # filter_by(restaurant_id=restaurant.id)
+    # Check if user is authorized.
+    if isauthorized() == False:
+        return redirect('/welcome')
+
+# Get items of the user.
     _items = session.query(Seri).filter_by(user_id=login_session['userid'])
     session.commit()
 
+# Return them as a json
     return jsonify(Metalitems=[i.serialize for i in _items])
-
 
 # MAIN
 

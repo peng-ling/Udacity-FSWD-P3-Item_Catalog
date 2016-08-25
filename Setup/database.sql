@@ -25,8 +25,9 @@ CREATE TABLE item (id Integer PRIMARY KEY, title String(250), description String
 
 
 CREATE VIEW Serialize AS
-SELECT i.id,
+SELECT i.id AS item_id,
        u.username,
+       c.id AS category_id,
        c.name AS category_name,
        i.title AS item_title,
        i.description AS item_description,
