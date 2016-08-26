@@ -1,17 +1,19 @@
 # Udacity Full Stack Web Developer Nanodegree P3 Item Catalog
-## How to run this project
-1. This project makes use of [vagrant](https://www.vagrantup.com/), so you first need to download and install it.
-2. With vagrant one can create and configure virtual development environments. It can be seen as a higher-level wrapper around virtualization software such as VirtualBox.
-3. The virtualization software used for tis project is [VirtualBox](https://www.virtualbox.org/), so this needs to be
-4. installed, too.
-5. This project makes use of [flask](http://flask.pocoo.org/), so you need to install it, if not already. You can follow   the [documentation](http://flask.pocoo.org/docs/0.10/installation/#installation) if necassary.
 
-## items for new readme ##
+## Requirements
 
-To use oauth from Google, you need to install the [the Google APIs Client Library for Python](https://developers.google.com/api-client-library/python/start/installation)
+- [Flask Version 0.11.1](http://flask.pocoo.org/)
+- [Werkzeug version 0.11.10](http://werkzeug.pocoo.org/)
+- [Python Version 2.7](https://www.python.org/)
+- [the Google APIs Client Library for Python](https://developers.google.com/api-client-library/python/start/installation)
+- [Requests 2.10.0](http://docs.python-requests.org/en/master/user/install/#pip-install-requests)
+- [SQLite](https://sqlite.org/)
 
-Go here for [more information on Google oauth for Python](https://developers.google.com/api-client-library/python/guide/aaa_oauth)
+## Run the Project
 
-you need to instal [Requests](http://docs.python-requests.org/en/master/user/install/#pip-install-requests)
-
-Go here for [more information on Requests] http://docs.python-requests.org/en/master/
+1. Make sure you met the Requirements
+2. Clone this repo
+3. Get your client_secrect.json <https://support.google.com/googleapi/answer/6158862> your redirect uri must be [<http://localhost:5000/metalitems>]
+4. Safe the client_secret.json in the projects root directory
+5. cd into root directory of project in console and type python itemlist.py
+6. open a browser and go to <http://localhost:5000>
