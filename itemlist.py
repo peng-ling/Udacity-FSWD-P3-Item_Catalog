@@ -553,26 +553,42 @@ def gconnect():
 
     return response
 
-# SERIALIZE
-# Returns data for a user as a nice json
-
-
-@app.route('/serialize', methods=['GET'])
-def serialize():
+# SERIALIZE BY categoryid
+# Returns data of one category for a user as a nice json
+@app.route('/serialize/<int:categoryid>', methods=['GET'])
+def serializebycategoryid(categoryid):
 
     # Check if user is authorized.
     if isauthorized() == False:
         return redirect('/welcome')
 
-# Get items of the user.
-    _items = session.query(Seri).filter_by(user_id=login_session['userid'])
+# Get items of the user filtered by categoryid.
+    _items = session.query(Seri).filter_by(user_id=login_session['userid'], \
+    category_id=categoryid)
     session.commit()
 
 # Return them as a json
     return jsonify(Metalitems=[i.serialize for i in _items])
 
-# MAIN
+# SERIALIZE BY categoryid and itemid
+# Returns data of one category for a user as a nice json
+@app.route('/serialize/<int:categoryid>/<int:itemid>', methods=['GET'])
+def serializebyitemid(categoryid, itemid):
 
+    # Check if user is authorized.
+    if isauthorized() == False:
+        return redirect('/welcome')
+
+# Get items of the user filtered by categoryid.
+    _items = session.query(Seri).filter_by(user_id=login_session['userid'], \
+    category_id=categoryid, item_id=itemid)
+    session.commit()
+
+# Return them as a json
+    return jsonify(Metalitems=[i.serialize for i in _items])
+
+
+# MAIN
 if __name__ == '__main__':
     print app.url_map
     app.secret_key = 'geheim'
