@@ -257,20 +257,33 @@ def deletecategory(categoryid):
     # Make sure site is only accessible by clicking the button and not by typing
     # url in browser.
     if request.method == 'POST':
+
         _user_id = login_session['userid']
+
+
         _categoryToDelete = session.query(Category).filter_by(
             id=categoryid, user_id=_user_id).first()
+        # Check if category to be deleted is in database. And if not, tell the
+        # user.
+        if _categoryToDelete is None:
 
-        # Tell user category has been deleted.
-        _flashmessage = 'Category ' + _categoryToDelete.name \
-            + ' has been delete!'
-        flash(_flashmessage)
+                _flashmessage = "Unfortunately you're not authorized to delete \
+                this category!"
+                flash(_flashmessage)
 
-        # Do it!
-        session.delete(_categoryToDelete)
-        session.commit()
+                return redirect(url_for('metalitems'))
+        else:
 
-    return redirect(url_for('metalitems'))
+                # Tell user category has been deleted.
+                _flashmessage = 'Category ' + _categoryToDelete.name \
+                + ' has been delete!'
+                flash(_flashmessage)
+
+                # Do it!
+                session.delete(_categoryToDelete)
+                session.commit()
+
+                return redirect(url_for('metalitems'))
 
 
 # NEWITEMS
@@ -318,7 +331,7 @@ def newitem(categoryid):
 
 # DELETEITEMS
 # go here when a user clicks on delete link for an specific item.
-@app.route('/deleteitem/<int:itemid>', methods=['POST', 'GET'])
+@app.route('/deleteitem/<int:itemid>', methods=['GET'])
 def deleteitem(itemid):
 
     # Check if user is authorized
@@ -327,19 +340,32 @@ def deleteitem(itemid):
 
     if request.method == 'GET':
         _user_id = login_session['userid']
+
+
         _itemToDelete = session.query(Item).filter_by(
             id=itemid, user_id=_user_id).first()
 
-        session.delete(_itemToDelete)
-        session.commit()
+        # Check if item to be deleted is in databes and if not tell the user.
+        if _itemToDelete is None:
 
-        # Let the user know that his item has been deleted.
-        _flashmessage = 'Item ' + _itemToDelete.title \
-            + ' has been deleted.'
-        flash(_flashmessage)
+            _flashmessage = "Unfortunately you're not authorized to delete \
+                            this item!"
+            flash(_flashmessage)
 
-        # return to main page
-    return redirect(url_for('metalitems'))
+            return redirect(url_for('metalitems'))
+
+        else:
+
+            session.delete(_itemToDelete)
+            session.commit()
+
+            # Let the user know that his item has been deleted.
+            _flashmessage = 'Item ' + _itemToDelete.title \
+                + ' has been deleted.'
+            flash(_flashmessage)
+
+            # return to main page
+            return redirect(url_for('metalitems'))
 
 
 # UPDATEITEMS
@@ -355,12 +381,25 @@ def updateitem(itemid):
     # item.
     if request.method == 'GET':
         _user_id = login_session['userid']
+
         _itemToUpdate = session.query(Item).filter_by(
             id=itemid, user_id=_user_id).first()
         _categories = session.query(Category).filter_by(user_id=_user_id)
 
-        return render_template('updatemetalitem.html',
-                               itemToUpdate=_itemToUpdate, categories=_categories)
+        # Check if item to be updated is in database and if not let the user
+        # know.
+        if _itemToUpdate is None:
+
+            _flashmessage = "Unfortunately you're not authorized to update \
+                                this item!"
+            flash(_flashmessage)
+
+            return redirect(url_for('metalitems'))
+
+        else:
+
+            return render_template('updatemetalitem.html',
+                    itemToUpdate=_itemToUpdate, categories=_categories)
 
     # Go here when user has updatet his item und clicks the save button.
     else:
@@ -372,18 +411,30 @@ def updateitem(itemid):
         _newcategory = session.query(Category).filter_by(
             name=request.form['chosencategory']).first()
 
-        session.query(Item).filter_by(id=itemid).update(
-            {"title": request.form['newitemtitle'],
-             "description": request.form['newitemdescription'],
-             "category_id": _newcategory.id})
-        session.commit()
+        # Check if item to be updated is in database or new category is in
+        # database. If not tell the user.
+        if _itemToUpdate is None or _newcategory is None:
 
-        # Let the user know that his item has been updated.
-        _flashmessage = 'Item ' + _itemToUpdate.title \
+            _flashmessage = "Unfortunately you're not authorized to update \
+                                this item!"
+            flash(_flashmessage)
+
+            return redirect(url_for('metalitems'))
+
+        else:
+
+            session.query(Item).filter_by(id=itemid).update(
+                {"title": request.form['newitemtitle'],
+                "description": request.form['newitemdescription'],
+                "category_id": _newcategory.id})
+            session.commit()
+
+                # Let the user know that his item has been updated.
+            _flashmessage = 'Item ' + _itemToUpdate.title \
                         + ' has been updated.'
-        flash(_flashmessage)
+            flash(_flashmessage)
 
-    return redirect(url_for('metalitems'))
+            return redirect(url_for('metalitems'))
 
 
 # OAUTH LOGIN
