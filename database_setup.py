@@ -10,8 +10,10 @@ import logging
 
 # Environment setup
 Base = declarative_base()
-
-engine = create_engine('sqlite:///itemcatalog.db', echo=True)
+# Use this for sqlite
+#engine = create_engine('sqlite:///itemcatalog.db', echo=True)
+# This for postgre
+engine = create_engine('postgresql://cataloge:A1See2D3See@localhost/itemlist')
 
 Base.metadata.bind = engine
 
