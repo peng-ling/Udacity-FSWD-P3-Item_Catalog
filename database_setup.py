@@ -69,7 +69,7 @@ class Category(Base):
 
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("user.id"))
+    user_id = Column(Integer, ForeignKey("itemlist.user.id"))
     user = relationship(User)
     item = relationship("Item", cascade="all,delete", backref="Category")
 
@@ -84,7 +84,7 @@ class Item(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String(250))
     description = Column(String(250))
-    category_id = Column(Integer, ForeignKey("category.id"))
-    user_id = Column(Integer, ForeignKey("user.id"))
+    category_id = Column(Integer, ForeignKey("itemlist.category.id"))
+    user_id = Column(Integer, ForeignKey("itemlist.user.id"))
     user = relationship(User)
     category = relationship(Category)
