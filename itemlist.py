@@ -455,7 +455,7 @@ def gconnect():
     try:
         # create flow object
         oauth_flow = flow_from_clientsecrets(
-            'client_secret.json', scope='')
+            '/var/www/html/Udacity-FSWD-P3-Item_Catalog/client_secret.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
         # get credentials by exchanging (what google send back after user
         # authenticated by gplus account log in vs client secret)
