@@ -27,6 +27,7 @@ session = DBSession()
 class Seri(Base):
 
     __tablename__ = "serialize"
+    __table_args__ = {'schema':'itemlist'}
 
     item_id = Column(Integer(), primary_key=True)
     username = Column(String(), primary_key=True)
@@ -53,6 +54,7 @@ class Seri(Base):
 class User(Base):
 
     __tablename__ = "user"
+    __table_args__ = {'schema':'itemlist'}
 
     id = Column(Integer, primary_key=True)
     username = Column(String(250))
@@ -63,6 +65,7 @@ class User(Base):
 class Category(Base):
 
     __tablename__ = "category"
+    __table_args__ = {'schema':'itemlist'}
 
     name = Column(String(80), nullable=False)
     id = Column(Integer, primary_key=True)
@@ -76,6 +79,7 @@ class Category(Base):
 class Item(Base):
 
     __tablename__ = "item"
+    __table_args__ = {'schema':'itemlist'}
 
     id = Column(Integer, primary_key=True)
     title = Column(String(250))
