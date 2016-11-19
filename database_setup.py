@@ -5,8 +5,8 @@ from sqlalchemy.orm import relationship, sessionmaker
 import logging
 
 # Uncomment for some more detailed logging
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.DEBUG)
 
 # Environment setup
 Base = declarative_base()
