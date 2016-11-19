@@ -22,6 +22,7 @@ Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)
 
 session = DBSession()
+session.execute("SET search_path TO itemlist")
 
 
 class Seri(Base):

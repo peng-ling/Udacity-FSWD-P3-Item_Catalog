@@ -27,24 +27,10 @@ SET client_min_messages = warning;
 -- Name: itemlist; Type: SCHEMA; Schema: -; Owner: postgres
 --
 
-
+CREATE SCHEMA itemlist;
 
 
 ALTER SCHEMA itemlist OWNER TO postgres;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
 
 SET search_path = itemlist, pg_catalog;
 
@@ -53,7 +39,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: category; Type: TABLE; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: category; Type: TABLE; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE category (
@@ -63,10 +49,31 @@ CREATE TABLE category (
 );
 
 
-ALTER TABLE itemlist.category OWNER TO pgadmin;
+ALTER TABLE itemlist.category OWNER TO postgres;
 
 --
--- Name: item; Type: TABLE; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: category_id_seq; Type: SEQUENCE; Schema: itemlist; Owner: postgres
+--
+
+CREATE SEQUENCE category_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE itemlist.category_id_seq OWNER TO postgres;
+
+--
+-- Name: category_id_seq; Type: SEQUENCE OWNED BY; Schema: itemlist; Owner: postgres
+--
+
+ALTER SEQUENCE category_id_seq OWNED BY category.id;
+
+
+--
+-- Name: item; Type: TABLE; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE item (
@@ -78,10 +85,31 @@ CREATE TABLE item (
 );
 
 
-ALTER TABLE itemlist.item OWNER TO pgadmin;
+ALTER TABLE itemlist.item OWNER TO postgres;
 
 --
--- Name: user; Type: TABLE; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: item_id_seq; Type: SEQUENCE; Schema: itemlist; Owner: postgres
+--
+
+CREATE SEQUENCE item_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE itemlist.item_id_seq OWNER TO postgres;
+
+--
+-- Name: item_id_seq; Type: SEQUENCE OWNED BY; Schema: itemlist; Owner: postgres
+--
+
+ALTER SEQUENCE item_id_seq OWNED BY item.id;
+
+
+--
+-- Name: user; Type: TABLE; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 CREATE TABLE "user" (
@@ -91,10 +119,52 @@ CREATE TABLE "user" (
 );
 
 
-ALTER TABLE itemlist."user" OWNER TO pgadmin;
+ALTER TABLE itemlist."user" OWNER TO postgres;
 
 --
--- Name: category_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: user_id_seq; Type: SEQUENCE; Schema: itemlist; Owner: postgres
+--
+
+CREATE SEQUENCE user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE itemlist.user_id_seq OWNER TO postgres;
+
+--
+-- Name: user_id_seq; Type: SEQUENCE OWNED BY; Schema: itemlist; Owner: postgres
+--
+
+ALTER SEQUENCE user_id_seq OWNED BY "user".id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: itemlist; Owner: postgres
+--
+
+ALTER TABLE ONLY category ALTER COLUMN id SET DEFAULT nextval('category_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: itemlist; Owner: postgres
+--
+
+ALTER TABLE ONLY item ALTER COLUMN id SET DEFAULT nextval('item_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: itemlist; Owner: postgres
+--
+
+ALTER TABLE ONLY "user" ALTER COLUMN id SET DEFAULT nextval('user_id_seq'::regclass);
+
+
+--
+-- Name: category_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY category
@@ -102,7 +172,7 @@ ALTER TABLE ONLY category
 
 
 --
--- Name: item_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: item_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY item
@@ -110,7 +180,7 @@ ALTER TABLE ONLY item
 
 
 --
--- Name: user_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: pgadmin; Tablespace:
+-- Name: user_pkey; Type: CONSTRAINT; Schema: itemlist; Owner: postgres; Tablespace:
 --
 
 ALTER TABLE ONLY "user"
@@ -118,7 +188,7 @@ ALTER TABLE ONLY "user"
 
 
 --
--- Name: category_user_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: pgadmin
+-- Name: category_user_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: postgres
 --
 
 ALTER TABLE ONLY category
@@ -126,7 +196,7 @@ ALTER TABLE ONLY category
 
 
 --
--- Name: item_category_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: pgadmin
+-- Name: item_category_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: postgres
 --
 
 ALTER TABLE ONLY item
@@ -134,75 +204,11 @@ ALTER TABLE ONLY item
 
 
 --
--- Name: item_user_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: pgadmin
+-- Name: item_user_id_fkey; Type: FK CONSTRAINT; Schema: itemlist; Owner: postgres
 --
 
 ALTER TABLE ONLY item
     ADD CONSTRAINT item_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id);
-
-
---
--- Name: public; Type: ACL; Schema: -; Owner: postgres
---
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-REVOKE ALL ON SCHEMA public FROM postgres;
-GRANT ALL ON SCHEMA public TO postgres;
-GRANT ALL ON SCHEMA public TO PUBLIC;
-
-
---
--- Name: category; Type: ACL; Schema: itemlist; Owner: pgadmin
---
-
-REVOKE ALL ON TABLE category FROM PUBLIC;
-REVOKE ALL ON TABLE category FROM pgadmin;
-GRANT ALL ON TABLE category TO pgadmin;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE category TO cataloge;
-
-
---
--- Name: item; Type: ACL; Schema: itemlist; Owner: pgadmin
---
-
-REVOKE ALL ON TABLE item FROM PUBLIC;
-REVOKE ALL ON TABLE item FROM pgadmin;
-GRANT ALL ON TABLE item TO pgadmin;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE item TO cataloge;
-
-
---
--- Name: user; Type: ACL; Schema: itemlist; Owner: pgadmin
---
-
-REVOKE ALL ON TABLE "user" FROM PUBLIC;
-REVOKE ALL ON TABLE "user" FROM pgadmin;
-GRANT ALL ON TABLE "user" TO pgadmin;
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "user" TO cataloge;
-
---
--- Name: Serialize; Type: VIEW; Schema: itemlist; Owner: pgadmin
---
-
-CREATE VIEW "Serialize" AS
- SELECT i.id AS item_id,
-    u.username,
-    c.id AS category_id,
-    c.name AS category_name,
-    i.title AS item_title,
-    i.description AS item_description,
-    u.id AS user_id
-   FROM (("user" u
-     LEFT JOIN category c ON ((u.id = c.user_id)))
-     LEFT JOIN item i ON ((i.category_id = c.id)));
-
-
-ALTER TABLE itemlist."Serialize" OWNER TO pgadmin;
-
-REVOKE ALL ON TABLE "Serialize" FROM PUBLIC;
-REVOKE ALL ON TABLE "Serialize" FROM pgadmin;
-GRANT ALL ON TABLE "Serialize" TO pgadmin;
-GRANT SELECT ON TABLE "Serialize" TO cataloge;
 
 
 --
