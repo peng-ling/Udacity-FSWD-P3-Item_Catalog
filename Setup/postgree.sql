@@ -32,6 +32,20 @@ CREATE SCHEMA itemlist;
 
 ALTER SCHEMA itemlist OWNER TO postgres;
 
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
 SET search_path = itemlist, pg_catalog;
 
 SET default_tablespace = '';
@@ -209,6 +223,86 @@ ALTER TABLE ONLY item
 
 ALTER TABLE ONLY item
     ADD CONSTRAINT item_user_id_fkey FOREIGN KEY (user_id) REFERENCES "user"(id);
+
+
+--
+-- Name: itemlist; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA itemlist FROM PUBLIC;
+REVOKE ALL ON SCHEMA itemlist FROM postgres;
+GRANT ALL ON SCHEMA itemlist TO postgres;
+GRANT USAGE ON SCHEMA itemlist TO cataloge;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- Name: category; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON TABLE category FROM PUBLIC;
+REVOKE ALL ON TABLE category FROM postgres;
+GRANT ALL ON TABLE category TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE category TO cataloge;
+
+
+--
+-- Name: category_id_seq; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE category_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE category_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE category_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE category_id_seq TO cataloge;
+
+
+--
+-- Name: item; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON TABLE item FROM PUBLIC;
+REVOKE ALL ON TABLE item FROM postgres;
+GRANT ALL ON TABLE item TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE item TO cataloge;
+
+
+--
+-- Name: item_id_seq; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE item_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE item_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE item_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE item_id_seq TO cataloge;
+
+
+--
+-- Name: user; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON TABLE "user" FROM PUBLIC;
+REVOKE ALL ON TABLE "user" FROM postgres;
+GRANT ALL ON TABLE "user" TO postgres;
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE "user" TO cataloge;
+
+
+--
+-- Name: user_id_seq; Type: ACL; Schema: itemlist; Owner: postgres
+--
+
+REVOKE ALL ON SEQUENCE user_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE user_id_seq FROM postgres;
+GRANT ALL ON SEQUENCE user_id_seq TO postgres;
+GRANT SELECT,USAGE ON SEQUENCE user_id_seq TO cataloge;
 
 
 --
