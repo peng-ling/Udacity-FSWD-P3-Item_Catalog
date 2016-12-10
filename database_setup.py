@@ -24,6 +24,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 session.execute("SET search_path TO itemlist")
+session.commit()
 
 
 class Seri(Base):
