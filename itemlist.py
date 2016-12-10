@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.secret_key = 'geheim'
 
 # Get client id from client_secrect.json for google oauth
-CLIENT_ID = json.loads(open('/var/www/html/Udacity-FSWD-P3-Item_Catalog/client_secret.json', 'r').read())[
+CLIENT_ID = json.loads(open('/var/www/gitrepos/Udacity-FSWD-P3-Item_Catalog/client_secret.json', 'r').read())[
     'web']['client_id']
 
 # Its about Metal!
