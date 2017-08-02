@@ -23,7 +23,7 @@
             </form>
         </div>
         <div class="panel-body toggleall" id="toggleitem{{c.id}}">
-            {%for i in items%} {%if i.category_id is equalto c.id%}
+            {%for i in items%} {%if i.category_id ==  c.id%}
             <h3>
                 {{i.title}}
           </h3>
